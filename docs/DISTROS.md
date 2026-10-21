@@ -167,15 +167,16 @@ missing `libpython3.9.so.1.0` and was not tested.
 
 **Current deployment workaround:** the installer pins a patched xtool at
 `f0a1f90efdbb0dc023e276ff529da92618da7a87`; it compiled SwiftUI but
-Apple ID authentication failed with `-80045`. Upstream xtool's newer `main`
+Apple ID authentication failed with `-80045`. Upstream xtool's newer `aa6ba75e7df759a84560885a86822dd119da8c55`
 authenticated successfully after a separate source build:
 
 ```sh
-git clone --depth 1 https://github.com/xtool-org/xtool.git "$HOME/src/xtool-main"
+mkdir -p "$HOME/src"
+git clone https://github.com/xtool-org/xtool.git "$HOME/src/xtool-main"
 cd "$HOME/src/xtool-main"
-git rev-parse HEAD  # record the exact tested commit
+git checkout --detach aa6ba75e7df759a84560885a86822dd119da8c55
 swift run -c release xtool auth
-"$HOME/src/xtool-main/.build/release/xtool" sdk install  # full, NOT --slim
+"$HOME/src/xtool-main/.build/release/xtool" sdk install "$HOME/apple-dev/Xcode_27.1.xip" # full, NOT --slim
 ```
 
 The upstream tool rejected the installer's old slim-style Darwin SDK until a
